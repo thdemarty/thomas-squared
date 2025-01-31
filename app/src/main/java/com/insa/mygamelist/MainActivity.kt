@@ -15,6 +15,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.insa.mygamelist.data.IGDB
+import com.insa.mygamelist.ui.components.AppNavHost
 import com.insa.mygamelist.ui.components.VideoGameCardList
 import com.insa.mygamelist.ui.theme.MyGamesListTheme
 
@@ -26,22 +27,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         IGDB.load(this)
-
         enableEdgeToEdge()
         setContent {
 
             MyGamesListTheme {
-                Scaffold(topBar = {
-                    TopAppBar(colors = topAppBarColors(
-                        containerColor = Color.Magenta,
-                        titleContentColor = Color.Black,
-                    ), title = { Text("My Games List - Thomas²") })
-                }, modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        VideoGameCardList(games = IGDB.games)
-                    }
-
-                }
+                AppNavHost()
             }
         }
     }

@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.insa.mygamelist.R
+import kotlinx.serialization.Serializable
 
 object IGDB {
 
@@ -65,11 +66,16 @@ object IGDB {
             val cover = covers.find { it.id == raw.cover }
             val genres = genres.filter { raw.genres.contains(it.id) }
             val platforms = platforms.filter { raw.platforms.contains(it.id) }
-            Game(raw.id, cover!!, raw.firstReleaseDate, genres, raw.name, platforms, raw.summary, raw.totalRating)
-        }
-
-        for (game in games) {
-            Log.d("IGDB", game.toString())
+            Game(
+                raw.id,
+                cover!!,
+                raw.firstReleaseDate,
+                genres,
+                raw.name,
+                platforms,
+                raw.summary,
+                raw.totalRating
+            )
         }
 
         Log.d("IGDB", "Successfully loaded ${games.size} games")
@@ -77,11 +83,37 @@ object IGDB {
     }
 }
 
+@Serializable
 data class Cover(val id: Long, val url: String)
+
+@Serializable
 data class Genre(val id: Long, val name: String)
+
+@Serializable
 data class PlatformLogo(val id: Long, val url: String)
-data class RawPlatform(val id: Long, val name: String, @SerializedName("platform_logo") val logoId: Long)
+
+@Serializable
 data class Platform(val id: Long, val name: String, val logo: PlatformLogo? = null)
+
+@Serializable
+data class Game(
+    val id: Long,
+    val cover: Cover = Cover(0, ""),
+    val firstReleaseDate: Int,
+    val genres: List<Genre> = emptyList(),
+    val name: String = "",
+    val platforms: List<Platform> = emptyList(),
+    val summary: String = "",
+    val totalRating: Double
+)
+
+
+// Temporary class to import games from Json
+data class RawPlatform(
+    val id: Long,
+    val name: String,
+    @SerializedName("platform_logo") val logoId: Long
+)
 
 data class RawGame(
     val id: Long,
@@ -92,16 +124,5 @@ data class RawGame(
     val platforms: List<Long>,
     val summary: String,
     @SerializedName("total_rating")
-    val totalRating: Double
-)
-
-data class Game(
-    val id: Long,
-    val cover: Cover,
-    val firstReleaseDate: Int,
-    val genres: List<Genre>,
-    val name: String,
-    val platforms: List<Platform>,
-    val summary: String,
     val totalRating: Double
 )
