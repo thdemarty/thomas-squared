@@ -25,7 +25,7 @@ object IGDB {
 
         covers = coversFromJson
 
-        // import Genres from Json
+        // Import Genres from Json
         val genresFromJson: List<Genre> = Gson().fromJson(
             context.resources.openRawResource(R.raw.genres).bufferedReader(),
             object : TypeToken<List<Genre>>() {}.type
