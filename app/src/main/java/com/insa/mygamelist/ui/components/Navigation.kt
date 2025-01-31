@@ -8,19 +8,27 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.insa.mygamelist.R
+import com.insa.mygamelist.data.FavoritesViewModel
 import com.insa.mygamelist.data.IGDB
 import kotlinx.serialization.Serializable
 import kotlin.system.exitProcess
@@ -33,7 +41,7 @@ data class GameDetailView(val id: Long)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavHost() {
+fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
     val controller = rememberNavController()
     val navBackStackEntry = controller.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
@@ -41,14 +49,10 @@ fun AppNavHost() {
     Scaffold(
         topBar = {
             if (currentDestination == null || currentDestination.hasRoute<HomeView>()) {
-                // On Home View
+                // Home View
                 TopAppBar(
                     navigationIcon = {
-                        IconButton(onClick = {
-                            // Quit the application
-                            exitProcess(0)
-
-                        }) {
+                        IconButton(onClick = { exitProcess(0) }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
@@ -60,9 +64,9 @@ fun AppNavHost() {
                         titleContentColor = Color.Black,
                     ),
                     title = { Text("MyGamesList") },
-                    )
+                )
             } else {
-                // On Game Detail View
+                // Game Detail View
                 val backStackEntry = controller.currentBackStackEntry
                 if (backStackEntry != null) {
                     val gameId = backStackEntry.toRoute<GameDetailView>().id
@@ -71,6 +75,13 @@ fun AppNavHost() {
                     if (game == null) {
                         TopAppBar(title = { Text("Game Detail View - Error") })
                     } else {
+                        val isFavorite by viewModel.favorites.collectAsState()
+
+                        // Load favorite state when screen appears
+                        LaunchedEffect(gameId) {
+                            viewModel.loadFavorite(gameId)
+                        }
+
                         TopAppBar(
                             colors = topAppBarColors(
                                 containerColor = Color.Magenta,
@@ -78,22 +89,34 @@ fun AppNavHost() {
                             ),
                             title = { Text(game.name) },
                             navigationIcon = {
-                                IconButton(onClick = {
-                                    controller.popBackStack()
-                                }) {
+                                IconButton(onClick = { controller.popBackStack() }) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                         contentDescription = "Back"
                                     )
                                 }
+                            },
+                            actions = {
+                                // Favorite Star Button (Uses Persistent DataStore)
+                                IconToggleButton(
+                                    checked = isFavorite[gameId] ?: false,
+                                    onCheckedChange = { viewModel.toggleFavorite(gameId) }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = if (isFavorite[gameId] == true) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+                                        ),
+                                        contentDescription = "Favorite",
+                                        tint = Color.Black
+                                    )
+                                }
                             }
                         )
                     }
-
-
                 }
             }
-        }, modifier = Modifier.fillMaxSize()
+        },
+        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = controller, startDestination = HomeView) {
@@ -108,5 +131,6 @@ fun AppNavHost() {
         }
     }
 }
+
 
 

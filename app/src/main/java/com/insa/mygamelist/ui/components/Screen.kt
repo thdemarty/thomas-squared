@@ -39,7 +39,7 @@ fun GameDetailScreen(
                     .fillMaxWidth()
                     .padding(10.dp)
                 ) {
-                    items(1) {
+                    item {
                         Row {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
