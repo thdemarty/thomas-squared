@@ -7,17 +7,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.insa.mygamelist.R
+import com.insa.mygamelist.data.FavoritesViewModel
 import com.insa.mygamelist.data.Game
 
 import java.util.StringJoiner
@@ -25,7 +33,8 @@ import java.util.StringJoiner
 
 @Composable
 fun VideoGameCard(
-    navController: NavController, modifier: Modifier = Modifier, game: Game
+    navController: NavController, modifier: Modifier = Modifier, game: Game,
+    viewModel: FavoritesViewModel = viewModel()
 ) {
     Row(
         modifier = Modifier
@@ -44,6 +53,24 @@ fun VideoGameCard(
             )
         }
         Column(modifier = Modifier.weight(0.75f)) {
+            val isFavorite by viewModel.favorites.collectAsState()
+
+            // Load favorite state when screen appears
+            LaunchedEffect(game.id) {
+                viewModel.loadFavorite(game.id)
+            }
+            IconToggleButton(
+                checked = isFavorite[game.id] ?: false,
+                onCheckedChange = { viewModel.toggleFavorite(game.id) }
+            ) {
+                Icon(
+                    painter = painterResource(
+                        id = if (isFavorite[game.id] == true) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+                    ),
+                    contentDescription = "Favorite",
+                    tint = Color.Black
+                )
+            }
             Row(modifier = Modifier.height(50.dp)) {
                 // underlined text
                 Text(
