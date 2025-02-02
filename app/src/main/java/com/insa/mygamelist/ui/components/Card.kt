@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -53,33 +54,36 @@ fun VideoGameCard(
             )
         }
         Column(modifier = Modifier.weight(0.75f)) {
-            val isFavorite by viewModel.favorites.collectAsState()
 
-            // Load favorite state when screen appears
-            LaunchedEffect(game.id) {
-                viewModel.loadFavorite(game.id)
-            }
-            IconToggleButton(
-                checked = isFavorite[game.id] ?: false,
-                onCheckedChange = { viewModel.toggleFavorite(game.id) }
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = if (isFavorite[game.id] == true) R.drawable.ic_star_filled else R.drawable.ic_star_outline
-                    ),
-                    contentDescription = "Favorite",
-                    tint = Color.Black
-                )
-            }
-            Row(modifier = Modifier.height(50.dp)) {
+            Row(modifier = Modifier.height(50.dp).fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically ) {
                 // underlined text
                 Text(
                     text = game.name,
                     maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.weight(1f)
                 )
+                val isFavorite by viewModel.favorites.collectAsState()
+
+                // Load favorite state when screen appears
+                LaunchedEffect(game.id) {
+                    viewModel.loadFavorite(game.id)
+                }
+                IconToggleButton(
+                    checked = isFavorite[game.id] ?: false,
+                    onCheckedChange = { viewModel.toggleFavorite(game.id) }
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (isFavorite[game.id] == true) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+                        ),
+                        contentDescription = "Favorite",
+                        tint = Color.Black
+                    )
+                }
             }
             Row(modifier = Modifier.height(50.dp)) {
                 val joiner = StringJoiner(", ")
