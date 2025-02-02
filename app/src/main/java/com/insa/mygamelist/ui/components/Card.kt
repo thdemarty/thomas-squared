@@ -34,7 +34,7 @@ import java.util.StringJoiner
 
 @Composable
 fun VideoGameCard(
-    navController: NavController, modifier: Modifier = Modifier, game: Game,
+    navController: NavController, game: Game,
     viewModel: FavoritesViewModel = viewModel()
 ) {
     Row(
