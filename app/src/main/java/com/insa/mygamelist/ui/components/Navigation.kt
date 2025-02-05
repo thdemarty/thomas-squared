@@ -1,5 +1,6 @@
 package com.insa.mygamelist.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,9 @@ object HomeView
 @Serializable
 data class GameDetailView(val id: Long)
 
+@Serializable
+object SettingsView
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
@@ -64,6 +68,15 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
                         titleContentColor = Color.Black,
                     ),
                     title = { Text("MyGamesList") },
+                    actions = {
+                        IconButton(onClick = {controller.navigate("settings") }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_settings),
+                                contentDescription = "Settings",
+                                tint = Color.Black
+                            )
+                        }
+                    }
                 )
             } else {
                 // Game Detail View
@@ -127,10 +140,13 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
                     val view: GameDetailView = backStackEntry.toRoute()
                     GameDetailScreen(navController = controller, gameId = view.id)
                 }
+                composable("settings") {
+                    Log.d("AppNavHost","Trying to navigate to settings")
+                    AccessibilitySettingsScreen(navController = controller)
+                }
             }
         }
     }
 }
-
 
 

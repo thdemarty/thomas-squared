@@ -21,7 +21,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
@@ -57,14 +59,17 @@ fun VideoGameCard(
 
             Row(modifier = Modifier.height(50.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically ) {
-                // underlined text
+                // Underlined text
                 Text(
                     text = game.name,
                     maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
+                    fontSize = 18.sp,
                     textDecoration = TextDecoration.Underline,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
                 )
                 val isFavorite by viewModel.favorites.collectAsState()
 
