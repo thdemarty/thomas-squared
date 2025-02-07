@@ -31,7 +31,6 @@ import com.insa.mygamelist.R
 import com.insa.mygamelist.data.FavoritesViewModel
 import com.insa.mygamelist.data.IGDB
 import kotlinx.serialization.Serializable
-import kotlin.system.exitProcess
 
 @Serializable
 object HomeView
@@ -46,25 +45,12 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
     val navBackStackEntry = controller.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
 
+
     Scaffold(
         topBar = {
             if (currentDestination == null || currentDestination.hasRoute<HomeView>()) {
                 // Home View
-                TopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = { exitProcess(0) }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
-                    },
-                    colors = topAppBarColors(
-                        containerColor = Color.Magenta,
-                        titleContentColor = Color.Black,
-                    ),
-                    title = { Text("MyGamesList") },
-                )
+                AppSearchBar(controller)
             } else {
                 // Game Detail View
                 val backStackEntry = controller.currentBackStackEntry

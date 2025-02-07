@@ -30,8 +30,7 @@ fun GameDetailScreen(
     navController: NavController,
     gameId: Long
 ) {
-
-    if (gameId > -1L) {
+   if (gameId > -1L) {
         val game = IGDB.games.find { it.id == gameId }
 
             if (game != null) {
