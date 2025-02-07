@@ -1,12 +1,16 @@
 package com.insa.mygamelist.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
@@ -28,14 +32,14 @@ import coil3.compose.AsyncImage
 import com.insa.mygamelist.R
 import com.insa.mygamelist.data.FavoritesViewModel
 import com.insa.mygamelist.data.Game
-
 import java.util.StringJoiner
 
 
 @Composable
 fun VideoGameCard(
     navController: NavController, game: Game,
-    viewModel: FavoritesViewModel = viewModel()
+    viewModel: FavoritesViewModel = viewModel(),
+    darkMode: Boolean = isSystemInDarkTheme()
 ) {
     Row(
         modifier = Modifier
@@ -77,11 +81,9 @@ fun VideoGameCard(
                     onCheckedChange = { viewModel.toggleFavorite(game.id) }
                 ) {
                     Icon(
-                        painter = painterResource(
-                            id = if (isFavorite[game.id] == true) R.drawable.ic_star_filled else R.drawable.ic_star_outline
-                        ),
+                        imageVector = if (isFavorite[game.id] == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = Color.Black
+                        tint = if (isFavorite[game.id] == true) Color.Magenta else if (darkMode) Color.White else Color.Black
                     )
                 }
             }
