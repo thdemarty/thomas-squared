@@ -1,9 +1,20 @@
 # Programmation mobile
 Ce repository contient l'ensemble du code pour le projet réalisé dans le cadre du cours de programmation mobile à l'INSA de Rennes.
 
-## Eléments non réalisés
+## Éléments non réalisés
+- [ ] Mise en cache / mode offline
+- [ ] Prise en compte de la pagination
+- [ ] Déclinaison tablette en “master-details”
+- [ ] Modification en clean architecture
+- [ ] Filtres
+- [ ] En XML ???
 
-## Eléments supplémentaires réalisés
+## Éléments en cours
+- [ ] Accessibilité
+- [ ] Swiper entre les jeux
+
+
+## Éléments supplémentaires réalisés
 ### fonctionnalités
 ### Outils techniques
 
