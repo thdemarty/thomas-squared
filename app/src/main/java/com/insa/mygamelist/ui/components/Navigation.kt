@@ -75,7 +75,9 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
                             ),
                             title = { Text(game.name) },
                             navigationIcon = {
-                                IconButton(onClick = { controller.popBackStack() }) {
+                                IconButton(onClick = { controller.navigate(HomeView) {
+                                    popUpTo(HomeView) { inclusive = true } // Clears back stack
+                                } }) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                         contentDescription = "Back"
@@ -83,7 +85,7 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
                                 }
                             },
                             actions = {
-                                // Favorite Star Button (Uses Persistent DataStore)
+                                // Favorite Button (Uses Persistent DataStore)
                                 IconToggleButton(
                                     checked = isFavorite[gameId] ?: false,
                                     onCheckedChange = { viewModel.toggleFavorite(gameId) }
