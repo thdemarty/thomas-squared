@@ -11,10 +11,11 @@ Ce repository contient l'ensemble du code pour le projet réalisé dans le cadre
 
 ## Éléments en cours
 - [ ] Accessibilité
-- [ ] Swiper entre les jeux
 
 
 ## Éléments supplémentaires réalisés
+- [x] Swiper entre les jeux
+
 ### fonctionnalités
 ### Outils techniques
 
