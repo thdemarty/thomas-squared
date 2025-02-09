@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +21,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
@@ -27,11 +28,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.insa.mygamelist.R
 import com.insa.mygamelist.data.FavoritesViewModel
 import com.insa.mygamelist.data.IGDB
 import kotlinx.serialization.Serializable
-import kotlin.system.exitProcess
 
 @Serializable
 object HomeView
@@ -46,25 +45,12 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
     val navBackStackEntry = controller.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
 
+
     Scaffold(
         topBar = {
             if (currentDestination == null || currentDestination.hasRoute<HomeView>()) {
                 // Home View
-                TopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = { exitProcess(0) }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
-                    },
-                    colors = topAppBarColors(
-                        containerColor = Color.Magenta,
-                        titleContentColor = Color.Black,
-                    ),
-                    title = { Text("MyGamesList") },
-                )
+                AppSearchBar(controller)
             } else {
                 // Game Detail View
                 val backStackEntry = controller.currentBackStackEntry
@@ -103,9 +89,7 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
                                     onCheckedChange = { viewModel.toggleFavorite(gameId) }
                                 ) {
                                     Icon(
-                                        painter = painterResource(
-                                            id = if (isFavorite[gameId] == true) R.drawable.ic_star_filled else R.drawable.ic_star_outline
-                                        ),
+                                        imageVector = if (isFavorite[game.id] == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                                         contentDescription = "Favorite",
                                         tint = Color.Black
                                     )
