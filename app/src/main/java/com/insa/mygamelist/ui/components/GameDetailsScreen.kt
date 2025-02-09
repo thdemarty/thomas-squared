@@ -58,9 +58,9 @@ fun GameDetailScreen(
         val nextGameId = if (gameIndex in 0 until IGDB.games.size - 1) IGDB.games[gameIndex + 1].id else null
         val prevGameId = if (gameIndex > 0) IGDB.games[gameIndex - 1].id else null
         val anchors = DraggableAnchors {
-            -1f at -150f // Swipe left (go to next game), Keep "-" signs
+            -1f at -450f // Swipe left (go to next game), Keep "-" signs
             0f at 0f     // Center (current game)
-            1f at 150f   // Swipe right (go to previous game)
+            1f at 450f   // Swipe right (go to previous game)
         }
 
         val draggableState = remember {
@@ -68,7 +68,7 @@ fun GameDetailScreen(
                 initialValue = 0f,
                 anchors = anchors,
                 positionalThreshold = { distance -> distance * 0.5f },
-                velocityThreshold = { 125f },
+                velocityThreshold = { 500f },
                 snapAnimationSpec = spring(),
                 decayAnimationSpec = exponentialDecay()
             )
