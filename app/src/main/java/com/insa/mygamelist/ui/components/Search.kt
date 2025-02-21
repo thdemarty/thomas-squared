@@ -17,7 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.insa.mygamelist.data.IGDB
+import com.insa.mygamelist.data.IGDBStatic
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +45,7 @@ fun AppSearchBar(navController: NavController) {
         onExpandedChange = { expanded = it },
     ) {
         // Results of the search
-        val results = IGDB.games.filter { it.name.contains(query, ignoreCase = true) }
+        val results = IGDBStatic.games.filter { it.name.contains(query, ignoreCase = true) }
         if (results.isEmpty()) {
             Text(modifier = Modifier.padding(20.dp), text = "No results found")
         } else {

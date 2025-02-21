@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.insa.mygamelist.R
 import kotlinx.serialization.Serializable
 
-object IGDB {
+object IGDBStatic {
 
     lateinit var covers: List<Cover>
     lateinit var platformLogos: List<PlatformLogo>

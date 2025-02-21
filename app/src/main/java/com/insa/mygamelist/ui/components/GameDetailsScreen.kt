@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.insa.mygamelist.R
-import com.insa.mygamelist.data.IGDB
+import com.insa.mygamelist.data.IGDBStatic
 import kotlinx.coroutines.launch
 import java.util.StringJoiner
 import kotlin.math.roundToInt
@@ -53,11 +53,11 @@ fun GameDetailScreen(
     gameId: Long
 ) {
     if (gameId > -1L) {
-        val game = IGDB.games.find { it.id == gameId }
-        val gameIndex = IGDB.games.indexOf(game)
+        val game = IGDBStatic.games.find { it.id == gameId }
+        val gameIndex = IGDBStatic.games.indexOf(game)
 
-        val nextGameId = if (gameIndex in 0 until IGDB.games.size - 1) IGDB.games[gameIndex + 1].id else null
-        val prevGameId = if (gameIndex > 0) IGDB.games[gameIndex - 1].id else null
+        val nextGameId = if (gameIndex in 0 until IGDBStatic.games.size - 1) IGDBStatic.games[gameIndex + 1].id else null
+        val prevGameId = if (gameIndex > 0) IGDBStatic.games[gameIndex - 1].id else null
         val anchors = DraggableAnchors {
             -1f at -450f // Swipe left (go to next game), Keep "-" signs
             0f at 0f     // Center (current game)
