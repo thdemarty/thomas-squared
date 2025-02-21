@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -152,15 +153,22 @@ fun GameDetailScreen(
                             items(game.platforms.size) { idx ->
                                 val platform = game.platforms[idx]
                                 val url = "https:" + platform.logo?.url
-                                AsyncImage(
-                                    modifier = Modifier
-                                        .height(80.dp)
-                                        .width(80.dp)
-                                        .padding(horizontal = 6.dp),
-                                    model = url,
-                                    contentDescription = platform.name,
-                                    error = painterResource(id = R.drawable.no_photo)
-                                )
+                                /* Put a platform logo inside a surface */
+                                Surface(
+                                    modifier = Modifier.height(80.dp).width(80.dp).padding(horizontal = 6.dp),
+                                    color = Color.Black,
+                                ) {
+                                    AsyncImage(
+                                        modifier = Modifier
+                                            .height(70.dp)
+                                            .width(70.dp)
+                                            .padding(5.dp),
+                                        model = url,
+                                        contentDescription = platform.name,
+                                        error = painterResource(id = R.drawable.no_photo_2)
+                                    )
+                                }
+
                             }
                         }
                         Row {
