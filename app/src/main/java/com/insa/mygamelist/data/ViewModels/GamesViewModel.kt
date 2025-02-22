@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.insa.mygamelist.data.IGDB
+import com.insa.mygamelist.data.models.Game
 import com.insa.mygamelist.data.states.GamesState
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -15,7 +16,17 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class GamesViewModel : ViewModel() {
     var gamesState by mutableStateOf(GamesState())
         private set
-    private var isAccessTokenAvailable by mutableStateOf(false)
+    var isTokenFetched by mutableStateOf(false)
+        private set
+
+    val filteredGames: List<Game>
+        get() = if (gamesState.searchQuery.isBlank()) {
+            gamesState.games
+        } else {
+            gamesState.games.filter {
+                it.name.contains(gamesState.searchQuery, ignoreCase = true)
+            }
+        }
 
     init {
         fetchToken()
@@ -33,7 +44,7 @@ class GamesViewModel : ViewModel() {
                     tokenResponse?.let {
                         IGDB.setAccessToken(it.accessToken)
                         Log.d("GamesViewModel", "Access token ${it.accessToken}")
-                        isAccessTokenAvailable = true
+                        isTokenFetched = true
                         fetchGames()
                     }
                 } else {
@@ -53,11 +64,13 @@ class GamesViewModel : ViewModel() {
         gamesState = gamesState.copy(isLoading = true)
         viewModelScope.launch {
             try {
-                val query = "fields cover.url,first_release_date,genres.name,name,platforms.name,platforms.platform_logo.url,summary,total_rating; " +
-                        "limit ${gamesState.limit};" +
-                        "offset ${gamesState.offset};" +
-                        "where summary != null & total_rating != null & cover != null & platforms != null & first_release_date != null;"
-                val body = query.toRequestBody("application/x-www-form-urlencoded".toMediaTypeOrNull())
+                val query =
+                    "fields cover.url,first_release_date,genres.name,name,platforms.name,platforms.platform_logo.url,summary,total_rating; " +
+                            "limit ${gamesState.limit};" +
+                            "offset ${gamesState.offset};" +
+                            "where summary != null & total_rating != null & cover != null & platforms != null & first_release_date != null;"
+                val body =
+                    query.toRequestBody("application/x-www-form-urlencoded".toMediaTypeOrNull())
 
                 val response = IGDB.igdbApi.getGames(body)
 
@@ -71,7 +84,10 @@ class GamesViewModel : ViewModel() {
                         error = null,
                     )
                 } else {
-                    Log.d("GamesViewModel", "1 (offset: ${gamesState.offset}) Error fetching games: $response")
+                    Log.d(
+                        "GamesViewModel",
+                        "1 (offset: ${gamesState.offset}) Error fetching games: $response"
+                    )
                     gamesState = gamesState.copy(
                         isLoading = false,
                         error = "Error fetching games: ${response.errorBody()?.string()}"
@@ -85,5 +101,9 @@ class GamesViewModel : ViewModel() {
                 )
             }
         }
+    }
+
+    fun updateSearchQuery(query: String) {
+        gamesState = gamesState.copy(searchQuery = query)
     }
 }

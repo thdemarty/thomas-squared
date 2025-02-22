@@ -10,5 +10,6 @@ fun HomeScreen(
     navController: NavController,
     viewModel: GamesViewModel
 ) {
-    VideoGameCardList(navController = navController, viewModel = viewModel)
+    val state = viewModel.gamesState
+    VideoGameCardList(navController = navController, games = state.games, viewModel = viewModel)
 }

@@ -9,4 +9,8 @@ data class GamesState(
     val hasMore: Boolean = true,
     val offset: Int = 0,
     val limit: Int = 20,
-)
+    val searchQuery: String = ""
+) {
+    // getGenres (flatten list of all genres)
+    val genres: List<String> = games.flatMap { game -> game.genres.map { it.name } }.distinct()
+}
