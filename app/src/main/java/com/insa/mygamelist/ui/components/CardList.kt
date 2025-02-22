@@ -14,8 +14,10 @@ import com.insa.mygamelist.data.ViewModels.GamesViewModel
 fun VideoGameCardList(
     navController: NavController,
     viewModel: GamesViewModel = viewModel()
-) {
+    ) {
+
     val state = viewModel.gamesState
+
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()

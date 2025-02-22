@@ -42,8 +42,9 @@ data class GameDetailView(val id: Long)
 @Composable
 fun AppNavHost(
     viewModel: FavoritesViewModel = viewModel(),
-    gamesViewModel: GamesViewModel = viewModel()
+    gamesViewModel: GamesViewModel = viewModel(),
 ) {
+
     val controller = rememberNavController()
     val navBackStackEntry = controller.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
@@ -110,11 +111,11 @@ fun AppNavHost(
         Column(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = controller, startDestination = HomeView) {
                 composable<HomeView> {
-                    HomeScreen(navController = controller)
+                    HomeScreen(navController = controller, gamesViewModel)
                 }
                 composable<GameDetailView> { backStackEntry ->
                     val view: GameDetailView = backStackEntry.toRoute()
-                    GameDetailScreen(navController = controller, gameId = view.id)
+                    GameDetailScreen(navController = controller, gameId = view.id, gamesViewModel)
                 }
             }
         }
