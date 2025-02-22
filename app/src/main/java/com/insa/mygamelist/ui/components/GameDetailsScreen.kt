@@ -37,10 +37,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.insa.mygamelist.R
-import com.insa.mygamelist.data.IGDBStatic
+import com.insa.mygamelist.data.ViewModels.GamesViewModel
+import com.insa.mygamelist.data.models.ImageSize
 import kotlinx.coroutines.launch
 import java.util.StringJoiner
 import kotlin.math.roundToInt
@@ -50,14 +52,17 @@ import kotlin.math.roundToInt
 @Composable
 fun GameDetailScreen(
     navController: NavController,
-    gameId: Long
+    gameId: Long,
+    viewModel: GamesViewModel = viewModel()
 ) {
-    if (gameId > -1L) {
-        val game = IGDBStatic.games.find { it.id == gameId }
-        val gameIndex = IGDBStatic.games.indexOf(game)
+    val state = viewModel.gamesState
 
-        val nextGameId = if (gameIndex in 0 until IGDBStatic.games.size - 1) IGDBStatic.games[gameIndex + 1].id else null
-        val prevGameId = if (gameIndex > 0) IGDBStatic.games[gameIndex - 1].id else null
+    if (gameId > -1L) {
+        val game = state.games.find { it.id == gameId }
+        val gameIndex = state.games.indexOf(game)
+
+        val nextGameId = if (gameIndex in 0 until state.games.size - 1) state.games[gameIndex + 1].id else null
+        val prevGameId = if (gameIndex > 0) state.games[gameIndex - 1].id else null
         val anchors = DraggableAnchors {
             -1f at -450f // Swipe left (go to next game), Keep "-" signs
             0f at 0f     // Center (current game)
@@ -120,13 +125,12 @@ fun GameDetailScreen(
                             )
                         }
                         Row {
-                            val url = "https:" + game.cover.url
                             AsyncImage(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(250.dp)
                                     .padding(top = 20.dp),
-                                model = url,
+                                model = game.cover.coverURL(ImageSize.CoverBig),
                                 alignment = Alignment.Center,
                                 contentDescription = game.name
                             )
@@ -152,7 +156,6 @@ fun GameDetailScreen(
                         LazyRow {
                             items(game.platforms.size) { idx ->
                                 val platform = game.platforms[idx]
-                                val url = "https:" + platform.logo?.url
                                 /* Put a platform logo inside a surface */
                                 Surface(
                                     modifier = Modifier.height(80.dp).width(80.dp).padding(horizontal = 6.dp),
@@ -163,7 +166,7 @@ fun GameDetailScreen(
                                             .height(70.dp)
                                             .width(70.dp)
                                             .padding(5.dp),
-                                        model = url,
+                                        model = platform.logo?.coverURL(ImageSize.CoverBig),
                                         contentDescription = platform.name,
                                         error = painterResource(id = R.drawable.no_photo_2)
                                     )
@@ -172,7 +175,7 @@ fun GameDetailScreen(
                             }
                         }
                         Row {
-                            Text(text = game.summary, textAlign = TextAlign.Justify)
+                            game.summary?.let { Text(text = it, textAlign = TextAlign.Justify) }
                         }
                     }
                 }

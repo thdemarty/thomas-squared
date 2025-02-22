@@ -1,13 +1,17 @@
 package com.insa.mygamelist.data
-
+/*
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.insa.mygamelist.R
+import com.insa.mygamelist.data.models.Cover
+import com.insa.mygamelist.data.models.Game
+import com.insa.mygamelist.data.models.Genre
+import com.insa.mygamelist.data.models.Platform
+import com.insa.mygamelist.data.models.PlatformLogo
 import kotlinx.serialization.Serializable
-
 object IGDBStatic {
 
     lateinit var covers: List<Cover>
@@ -53,7 +57,7 @@ object IGDBStatic {
             val logo = platformLogos.find { raw.logoId == it.id }
             if (logo == null) Log.e("IGDB", "No logo found for platform ${raw.name}")
 
-            Platform(raw.id, raw.name, logo)
+            Platform(raw.id, raw.name, logo!!)
         }
 
         // Import Games from Json
@@ -68,10 +72,10 @@ object IGDBStatic {
             val platforms = platforms.filter { raw.platforms.contains(it.id) }
             Game(
                 raw.id,
+                raw.name,
                 cover!!,
                 raw.firstReleaseDate,
                 genres,
-                raw.name,
                 platforms,
                 raw.summary,
                 raw.totalRating
@@ -82,30 +86,6 @@ object IGDBStatic {
 
     }
 }
-
-@Serializable
-data class Cover(val id: Long, val url: String)
-
-@Serializable
-data class Genre(val id: Long, val name: String)
-
-@Serializable
-data class PlatformLogo(val id: Long, val url: String)
-
-@Serializable
-data class Platform(val id: Long, val name: String, val logo: PlatformLogo? = null)
-
-@Serializable
-data class Game(
-    val id: Long,
-    val cover: Cover = Cover(0, ""),
-    val firstReleaseDate: Int,
-    val genres: List<Genre> = emptyList(),
-    val name: String = "",
-    val platforms: List<Platform> = emptyList(),
-    val summary: String = "",
-    val totalRating: Double
-)
 
 
 // Temporary class to import games from Json
@@ -126,3 +106,4 @@ data class RawGame(
     @SerializedName("total_rating")
     val totalRating: Double
 )
+*/

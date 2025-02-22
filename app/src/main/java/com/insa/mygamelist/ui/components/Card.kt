@@ -31,7 +31,8 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.insa.mygamelist.R
 import com.insa.mygamelist.data.FavoritesViewModel
-import com.insa.mygamelist.data.Game
+import com.insa.mygamelist.data.models.Game
+import com.insa.mygamelist.data.models.ImageSize
 import java.util.StringJoiner
 
 
@@ -50,9 +51,8 @@ fun VideoGameCard(
             }, horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Column(modifier = Modifier.weight(0.25f)) {
-            val url = "https:" + game.cover.url
             AsyncImage(
-                model = url,
+                model = game.cover.coverURL(ImageSize.CoverBig),
                 contentDescription = game.name,
                 error = painterResource(id = R.drawable.cover_placeholder)
             )

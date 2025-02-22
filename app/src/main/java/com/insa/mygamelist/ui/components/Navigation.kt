@@ -29,7 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.insa.mygamelist.data.FavoritesViewModel
-import com.insa.mygamelist.data.IGDBStatic
+import com.insa.mygamelist.data.ViewModels.GamesViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -40,11 +40,15 @@ data class GameDetailView(val id: Long)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
+fun AppNavHost(
+    viewModel: FavoritesViewModel = viewModel(),
+    gamesViewModel: GamesViewModel = viewModel()
+) {
     val controller = rememberNavController()
     val navBackStackEntry = controller.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
 
+    val state = gamesViewModel.gamesState
 
     Scaffold(
         topBar = {
@@ -56,8 +60,7 @@ fun AppNavHost(viewModel: FavoritesViewModel = viewModel()) {
                 val backStackEntry = controller.currentBackStackEntry
                 if (backStackEntry != null) {
                     val gameId = backStackEntry.toRoute<GameDetailView>().id
-                    val game = IGDBStatic.games.find { it.id == gameId }
-
+                    val game = state.games.find { it.id == gameId }
                     if (game == null) {
                         TopAppBar(title = { Text("Game Detail View - Error") })
                     } else {
