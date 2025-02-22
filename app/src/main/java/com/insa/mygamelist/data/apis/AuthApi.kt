@@ -1,5 +1,6 @@
-package com.insa.mygamelist.data
+package com.insa.mygamelist.data.apis
 
+import com.insa.mygamelist.data.models.TokenResponse
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query

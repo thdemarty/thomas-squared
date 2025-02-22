@@ -106,4 +106,5 @@ class GamesViewModel : ViewModel() {
     fun updateSearchQuery(query: String) {
         gamesState = gamesState.copy(searchQuery = query)
     }
+
 }

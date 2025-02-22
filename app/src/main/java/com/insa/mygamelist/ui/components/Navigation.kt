@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -74,8 +75,8 @@ fun AppNavHost(
 
                         TopAppBar(
                             colors = topAppBarColors(
-                                containerColor = Color.Magenta,
-                                titleContentColor = Color.Black,
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             ),
                             title = { Text(game.name) },
                             navigationIcon = {

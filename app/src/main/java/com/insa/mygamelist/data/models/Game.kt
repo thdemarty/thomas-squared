@@ -15,5 +15,7 @@ data class Game(
     @SerialName("genres") val genres: List<Genre> = emptyList(),
     @SerialName("platforms") val platforms: List<Platform> = emptyList(),
     @SerialName("summary") val summary: String? = "",
-    @SerialName("total_rating") val totalRating: Double? = null
+    @SerialName("total_rating") val totalRating: Double? = null,
+    // CUSTOM FIELD ABOVE -- DO NOT CHANGE
+    @SerialName("favorite") val favorite: Boolean = false
 )

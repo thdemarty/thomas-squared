@@ -1,5 +1,7 @@
 package com.insa.mygamelist.data
 
+import com.insa.mygamelist.data.apis.AuthApi
+import com.insa.mygamelist.data.apis.IgdbApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -38,13 +40,13 @@ object IGDB {
             .create(AuthApi::class.java)
     }
 
-    val igdbApi: IGDBApi by lazy {
+    val igdbApi: IgdbApi by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL_IGDB)
             .client(igdbClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
-            .create(IGDBApi::class.java)
+            .create(IgdbApi::class.java)
     }
 
     fun setAccessToken(token: String) {
