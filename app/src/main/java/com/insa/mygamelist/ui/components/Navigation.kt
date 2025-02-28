@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
@@ -98,7 +97,7 @@ fun AppNavHost(
                                     Icon(
                                         imageVector = if (isFavorite[game.id] == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                                         contentDescription = "Favorite",
-                                        tint = Color.Black
+                                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                                     )
                                 }
                             }

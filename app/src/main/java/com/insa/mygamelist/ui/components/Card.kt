@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,7 +84,7 @@ fun VideoGameCard(
                     Icon(
                         imageVector = if (isFavorite[game.id] == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = if (isFavorite[game.id] == true) Color.Magenta else if (darkMode) Color.White else Color.Black
+                        tint = if (isFavorite[game.id] == true) MaterialTheme.colorScheme.primary else if (darkMode) Color.White else Color.Black
                     )
                 }
             }
