@@ -8,8 +8,8 @@ programmation mobile à l'INSA de Rennes.
 - [x] Mise en favori survivant à la fermeture de l’app
 - [x] Scroll infini
 - [x] Ajout de jeux aux favoris
+- [x] Recherche basée sur l'API
 
 ## Elements en cours de réalisation / à réaliser
 - [ ] Filtres par tag
-- [ ] Recherche basée sur l'API
 - [ ] Mise en cache / mode offline
