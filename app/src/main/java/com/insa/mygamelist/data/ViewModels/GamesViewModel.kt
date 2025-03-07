@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.insa.mygamelist.data.IGDB
-import com.insa.mygamelist.data.models.Game
 import com.insa.mygamelist.data.states.GamesState
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -18,16 +17,6 @@ class GamesViewModel : ViewModel() {
         private set
     var isTokenFetched by mutableStateOf(false)
         private set
-
-    val filteredGames: List<Game>
-        get() = if (gamesState.searchQuery.isBlank()) {
-            gamesState.games
-        } else {
-            gamesState.games.filter {
-                it.name.contains(gamesState.searchQuery, ignoreCase = true)
-            }
-        }
-
     init {
         fetchToken()
     }
@@ -59,8 +48,15 @@ class GamesViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Get the games from the IGDB api
+     */
     fun fetchGames() {
-        if (gamesState.isLoading || !gamesState.hasMore) return
+        // If we are searching we can not fetch games
+        if (gamesState.searchQuery != "") return
+
+        // If we are loading or there is no more game
+        if  (gamesState.isLoading || !gamesState.hasMore) return
         gamesState = gamesState.copy(isLoading = true)
         viewModelScope.launch {
             try {
@@ -76,6 +72,7 @@ class GamesViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     val newGames = response.body() ?: emptyList()
+
                     gamesState = gamesState.copy(
                         games = gamesState.games + newGames,
                         isLoading = false,
@@ -84,7 +81,7 @@ class GamesViewModel : ViewModel() {
                         error = null,
                     )
                 } else {
-                    Log.d(
+                    Log.e(
                         "GamesViewModel",
                         "1 (offset: ${gamesState.offset}) Error fetching games: $response"
                     )
@@ -103,8 +100,52 @@ class GamesViewModel : ViewModel() {
         }
     }
 
-    fun updateSearchQuery(query: String) {
-        gamesState = gamesState.copy(searchQuery = query)
+    /**
+     * Search a game by its name
+     */
+    fun searchGameByName(name: String) {
+        if (gamesState.isLoading) return
+
+        Log.d("GamesViewModel", "Searching for game: $name")
+        gamesState = gamesState.copy(isLoading = true, searchQuery = name)
+        viewModelScope.launch {
+            try {
+                val query =
+                    "search \"$name\"; fields cover.url,first_release_date,genres.name,name,platforms.name,platforms.platform_logo.url,summary,total_rating;" +
+                            "limit 10;" +
+                            "where summary != null & total_rating != null & cover != null & platforms != null & first_release_date != null;"
+                val body = query.toRequestBody("application/x-www-form-urlencoded".toMediaTypeOrNull())
+
+                val response = IGDB.igdbApi.searchGame(body)
+
+                if (response.isSuccessful) {
+                    val retrievedGames = response.body() ?: emptyList()
+
+
+                    gamesState = gamesState.copy(
+                        games = gamesState.games + retrievedGames,
+                        searchQuery = "",
+                        isLoading = false,
+                        error = null,
+                    )
+                } else {
+                    Log.e("GamesViewModel", "Error fetching games: $response")
+                    gamesState = gamesState.copy(
+                        isLoading = false,
+                        searchQuery = "",
+                        error = "Error fetching games: ${response.errorBody()?.string()}"
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("GamesViewModel", "Error fetching games: $e")
+                gamesState = gamesState.copy(
+                    isLoading = false,
+                    searchQuery = "",
+                    error = "Exception fetching games: ${e.message}"
+                )
+            }
+        }
+
     }
 
 }

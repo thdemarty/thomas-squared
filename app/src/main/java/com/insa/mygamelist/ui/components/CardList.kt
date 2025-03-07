@@ -31,7 +31,8 @@ fun VideoGameCardList(
         items(games.size) { idx ->
             val game = games[idx]
             VideoGameCard(navController = navController, game = game)
-            if (idx == games.size -1 && state.hasMore && state.searchQuery.isBlank()) {
+            val isSearching = state.searchQuery == ""
+            if (!isSearching && idx == games.size -1 && state.hasMore && state.searchQuery.isBlank()) {
                 viewModel.fetchGames()
             }
         }

@@ -11,4 +11,8 @@ interface IgdbApi {
     @POST("games")
     @Headers("Content-Type: text/plain")
     suspend fun getGames(@Body query: RequestBody): Response<List<Game>>
+
+    @POST("games")
+    @Headers("Content-Type: text/plain")
+    suspend fun searchGame(@Body query: RequestBody): Response<List<Game>>
 }

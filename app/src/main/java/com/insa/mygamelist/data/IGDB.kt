@@ -18,12 +18,10 @@ object IGDB {
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
     private val authClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
         .build()
 
     private val igdbClient = OkHttpClient.Builder()
         .addInterceptor(AuthHeaderInterceptor(CLIENT_ID, accessToken))
-        .addInterceptor(loggingInterceptor)
         .build()
 
     private val json = Json {

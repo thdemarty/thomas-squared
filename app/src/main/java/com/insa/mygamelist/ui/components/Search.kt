@@ -40,9 +40,13 @@ fun AppSearchBar(
             InputField(
                 query = query,
                 onQueryChange = { query = it },
-                onSearch = { },
+                onSearch = {
+                    viewModel.searchGameByName(query)
+                },
                 expanded = expanded,
-                onExpandedChange = { expanded = it },
+                onExpandedChange = {
+                    expanded = it
+                },
                 placeholder = { Text("Search for game...") },
                 trailingIcon = {
                     Icon(Icons.Default.Search, contentDescription = "Search")
