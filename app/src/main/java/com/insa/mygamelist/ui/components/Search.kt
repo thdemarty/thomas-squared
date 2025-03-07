@@ -1,5 +1,6 @@
 package com.insa.mygamelist.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -44,6 +45,8 @@ fun AppSearchBar(
                 expanded = expanded,
                 onExpandedChange = {
                     expanded = it
+                    viewModel.isSearching = it
+                    Log.d("AppSearchBar", "isSearching ${viewModel.isSearching}")
                 },
                 placeholder = { Text("Search for game...") },
                 trailingIcon = {

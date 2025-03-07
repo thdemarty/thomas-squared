@@ -17,6 +17,8 @@ class GamesViewModel : ViewModel() {
         private set
     var isTokenFetched by mutableStateOf(false)
         private set
+    var isSearching = false
+
     init {
         fetchToken()
     }
@@ -53,7 +55,7 @@ class GamesViewModel : ViewModel() {
      */
     fun fetchGames() {
         // If we are searching we can not fetch games
-        if (gamesState.searchQuery != "") return
+        if (isSearching) return
 
         // If we are loading or there is no more game
         if  (gamesState.isLoading || !gamesState.hasMore) return
@@ -108,6 +110,7 @@ class GamesViewModel : ViewModel() {
 
         Log.d("GamesViewModel", "Searching for game: $name")
         gamesState = gamesState.copy(isLoading = true, searchQuery = name)
+        isSearching = true
         viewModelScope.launch {
             try {
                 val query =
@@ -121,13 +124,13 @@ class GamesViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val retrievedGames = response.body() ?: emptyList()
 
-
                     gamesState = gamesState.copy(
                         games = gamesState.games + retrievedGames,
                         searchQuery = "",
                         isLoading = false,
                         error = null,
                     )
+                    isSearching = false
                 } else {
                     Log.e("GamesViewModel", "Error fetching games: $response")
                     gamesState = gamesState.copy(
@@ -135,6 +138,7 @@ class GamesViewModel : ViewModel() {
                         searchQuery = "",
                         error = "Error fetching games: ${response.errorBody()?.string()}"
                     )
+                    isSearching = false
                 }
             } catch (e: Exception) {
                 Log.e("GamesViewModel", "Error fetching games: $e")
@@ -143,8 +147,8 @@ class GamesViewModel : ViewModel() {
                     searchQuery = "",
                     error = "Exception fetching games: ${e.message}"
                 )
+                isSearching = false
             }
         }
-
     }
 }
