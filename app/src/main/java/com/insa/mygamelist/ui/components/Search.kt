@@ -2,11 +2,9 @@ package com.insa.mygamelist.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults.InputField
@@ -56,22 +54,6 @@ fun AppSearchBar(
         expanded = expanded,
         onExpandedChange = { expanded = it },
     ) {
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp),
-        ) {
-            items(state.genres.size) {
-                val genre = state.genres[it]
-                FilterChip(
-                    modifier = Modifier.padding(horizontal = 2.5.dp),
-                    selected = false,
-                    onClick = { },
-                    label = { Text(genre) },
-                )
-            }
-
-        }
         // Results of the search
         val results = state.games.filter {
             it.name.contains(query, ignoreCase = true)

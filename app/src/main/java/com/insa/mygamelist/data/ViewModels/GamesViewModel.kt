@@ -147,5 +147,4 @@ class GamesViewModel : ViewModel() {
         }
 
     }
-
 }
