@@ -1,22 +1,15 @@
 # Programmation mobile
-Ce repository contient l'ensemble du code pour le projet réalisé dans le cadre du cours de programmation mobile à l'INSA de Rennes.
-
-## Éléments non réalisés
-- [ ] Mise en cache / mode offline
-- [ ] Prise en compte de la pagination
-- [ ] Déclinaison tablette en “master-details”
-- [ ] Modification en clean architecture
-- [ ] Filtres
-- [ ] En XML ???
-
-## Éléments en cours
-- [ ] Accessibilité
-
+Ce repository contient l'ensemble du code pour le projet réalisé dans le cadre du cours de 
+programmation mobile à l'INSA de Rennes.
 
 ## Éléments supplémentaires réalisés
 - [x] Swiper entre les jeux
+- [x] Chargement des jeux grâce à l'API IGDB
+- [x] Mise en favori survivant à la fermeture de l’app
+- [x] Scroll infini
+- [x] Ajout de jeux aux favoris
 
-### fonctionnalités
-### Outils techniques
-
-## Améliorations possibles
+## Elements en cours de réalisation / à réaliser
+- [ ] Filtres par tag
+- [ ] Recherche basée sur l'API
+- [ ] Mise en cache / mode offline
